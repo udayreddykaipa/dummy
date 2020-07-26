@@ -1,0 +1,132 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <h2>Data Collection Form</h2>
+    <input type="text" placeholder="Name" id="name">
+    <input type="text" placeholder="Mobile no" id="mbno">
+    <input type="text" placeholder="Email" id="mail">
+    <input type="text" placeholder="Address" id="addr">
+    <input type="date" id="dob">
+    <button id="upload">Submit my Data</button>
+    <!-- The core Firebase JS SDK is always required and must be listed first
+    <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-database.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/7.16.0/firebase-analytics.js"></script> -->
+
+
+    <a id="download">Download
+        <button id="stop">Stop
+            <script>
+                let shouldStop = false;
+                let stopped = false;
+                const downloadLink = document.getElementById('download');
+                const stopButton = document.getElementById('stop');
+
+                stopButton.addEventListener('click', function () {
+                    shouldStop = true;
+                })
+
+                var handleSuccess = function (stream) {
+                    const options = { mimeType: 'video/webm' };
+                    const recordedChunks = [];
+                    const mediaRecorder = new MediaRecorder(stream, options);
+                    console.log('success')
+                    mediaRecorder.addEventListener('dataavailable', function (e) {
+                        if (e.data.size > 0) {
+                            recordedChunks.push(e.data);
+                            console.log(e.data)
+                        }
+
+                        if (shouldStop === true && stopped === false) {
+                            mediaRecorder.stop();
+                            stopped = true;
+                        }
+                        console.log(e.data)
+
+                    });
+
+                    mediaRecorder.addEventListener('stop', function () {
+                        downloadLink.href = URL.createObjectURL(new Blob(recordedChunks));
+                        downloadLink.download = 'acetest.webm';
+                    });
+
+                    mediaRecorder.start();
+                };
+
+                navigator.mediaDevices.getUserMedia({ audio: true, video: true })
+                    .then(handleSuccess);
+
+            </script>
+            <input type="file" accept="video/*" capture="camera" id="recorder">
+            <video id="player" controls></video>
+            <script>
+              var recorder = document.getElementById('recorder');
+              var player = document.getElementById('player');
+            
+              recorder.addEventListener('change', function(e) {
+                var file = e.target.files[0];
+                // Do something with the video file.
+                player.src = URL.createObjectURL(file);
+              });
+            </script>
+            <script>
+                navigator.permissions.query({ name: 'camera' }).then(function (result) {
+                    if (result.state == 'granted') {
+                        console.log('jhuin')
+                    } else if (result.state == 'prompt') {
+                        console.log('jhnkkhuhiygughuyn')
+
+                    } else if (result.state == 'denied') {
+                        console.log('i ma jdnb')
+                    }
+                    result.onchange = function () {
+
+                    };
+                });
+
+
+            </script>
+            <!-- <script>
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyD2hO-LNKyAkzhhbb_J-CP4CUtANUFjNxY",
+            authDomain: "dataaqu-263b6.firebaseapp.com",
+            databaseURL: "https://dataaqu-263b6.firebaseio.com",
+            projectId: "dataaqu-263b6",
+            storageBucket: "dataaqu-263b6.appspot.com",
+            messagingSenderId: "841158918091",
+            appId: "1:841158918091:web:b925d91645d51ef3e0404e",
+            measurementId: "G-FJ6B9N0K96"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+    <script>
+        document.getElementById('upload').addEventListener('click', () => {
+            firebase.database().ref().child('users').push({
+                'Name': document.getElementById('name').value,
+                'Email ID': document.getElementById('mail').value,
+                'Mobile Number': document.getElementById('mbno').value,
+                'Dob': document.getElementById('dob').value,
+                'ADDRESS': document.getElementById('addr').value,
+
+            }, function (error) {
+                if (error) {
+                    alert('error' + error)
+
+                } else {
+                    window.location.reload()
+                }
+            })
+        })
+    </script> -->
+</body>
+
+</html>
